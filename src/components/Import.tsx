@@ -1,7 +1,7 @@
 // src/components/Import.tsx
 import { code } from "../jsxFactory.js";
 
-interface ImportProps {
+export interface ImportProps {
   from: string;
   imports: string[];
 }

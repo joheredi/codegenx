@@ -1,16 +1,31 @@
-import { read } from "fs";
 import { code } from "../jsxFactory.js";
+import { WithDocsProps, formatDocumentation } from "./common/with-docs.js";
 
-interface PropertyProps {
+export interface PropertyProps extends WithDocsProps {
   name: string;
-  type: string;
+  type: any;
   required?: boolean;
   readonly?: boolean;
+  noQuoteWrap?: boolean;
 }
 
-export function Property({ name, type, required, readonly }: PropertyProps) {
+export function Property({
+  name,
+  type,
+  required,
+  readonly,
+  noQuoteWrap,
+  docs,
+}: PropertyProps) {
   const optionality = required ? "" : "?";
   const visibility = readonly ? "readonly" : "";
+  let formattedDoc = formatDocumentation(docs);
+
+  let nameString = `${name}`;
+  if (!noQuoteWrap) {
+    nameString = `"${name}"`;
+  }
+
   return code`
-    ${visibility} ${name}${optionality}: ${type};`;
+  ${formattedDoc}${visibility} ${nameString}${optionality}: ${type}`;
 }

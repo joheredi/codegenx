@@ -1,23 +1,34 @@
 // src/components/Function.tsx
 import { code } from "../jsxFactory.js";
+import { Method } from "./Method.js";
+import { TypeVariable } from "./TemplateDeclaration.js";
 
-interface FunctionProps {
+export interface FunctionParameter {
   name: string;
-  returnType: string;
-  params?: string[];
+  type: string;
+  required?: boolean;
+}
+
+export interface FunctionProps {
+  name: string;
+  exported?: boolean;
+  returnType?: string;
+  params?: FunctionParameter[];
+  templateTypes?: TypeVariable[];
   children?: any;
 }
 
-// TODO: Handle params better to support types, default values, etc
 export function Function({
   name,
   returnType,
+  exported,
+  templateTypes,
   params = [],
   children,
 }: FunctionProps) {
+  const exportedString = exported ? "export " : "";
+
   return code`
-    export function ${name}(${params.join(", ")}): ${returnType} {
-      ${children}
-    }
+    ${exportedString} function ${Method({ name, returnType, templateTypes, params, children })}
   `;
 }

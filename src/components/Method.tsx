@@ -1,15 +1,31 @@
+// src/components/Function.tsx
 import { code } from "../jsxFactory.js";
+import { MethodSignature } from "./MethodSignature.js";
+import { TypeVariable } from "./TemplateDeclaration.js";
 
-interface MethodProps {
+export interface MethodParameter {
   name: string;
-  returnType: string;
+  type: string;
+  required?: boolean;
+}
+
+export interface MethodProps {
+  name: string;
+  returnType?: string;
+  params?: MethodParameter[];
+  templateTypes?: TypeVariable[];
   children?: any;
 }
 
-// TODO: support visibilities and parameters
-export function Method({ name, returnType, children }: MethodProps) {
+export function Method({
+  name,
+  returnType,
+  templateTypes,
+  params = [],
+  children,
+}: MethodProps) {
   return code`
-    ${name}(): ${returnType} {
+    ${MethodSignature({ name, returnType, templateTypes, params })} {
       ${children}
     }
   `;
